@@ -128,16 +128,14 @@ class WebService:
          recipient_id: a list of ebill recipient id, email address or UIDHR
 
         """
-        array_bill_recipient = self.client.get_type("ns2:ArrayOfBillRecipient")
+        array_bill_recipient = self.client.get_type(
+            '{http://schemas.microsoft.com/2003/10/Serialization/Arrays}ArrayOfstring'
+        )
         recipients = array_bill_recipient(bill_recipient_id)
 
         res = self.service.GetEBillRecipientSubscriptionStatusBulk(
             BillerID=self.biller_id, RecipientID=recipients
         )
-        # An error occurs, maybe because the response is badly formatted ?
-        # zeep.exceptions.ValidationError:
-        #     Missing element SubmissionStatus
-        #     (GetEBillRecipientSubscriptionStatusBulk.RecipientID.BillRecipient)
         return res
 
     def get_invoice_list(self, archive_data=False):
